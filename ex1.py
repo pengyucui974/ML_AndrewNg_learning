@@ -144,27 +144,74 @@
 # fig.colorbar(surface, ax=ax, shrink=0.6, label="Cost")
 # plt.show()
 
-import numpy as np
-data=np.loadtxt("ex1data2.txt",delimiter=",")
-x1=data[:,0]
-x2=data[:,1]
-y =data[:,2]
-#feature scaling
-x1_mean,x1_std=np.mean(x1),np.std(x1)
-x2_mean,x2_std=np.mean(x2),np.std(x2)
-x1=(x1-np.mean(x1))/np.std(x1)
-x2=(x2-np.mean(x2))/np.std(x2)
-theta=np.zeros(3)
-gradient=np.zeros(3)
-learning_rate=0.1
-cost_func_list = []
-for i in range(1000):
-    error = theta[0] + theta[1] * x1 + theta[2] * x2 - y
-    gradient[0] = np.mean(error)
-    gradient[1] = np.mean(error*x1)
-    gradient[2] = np.mean(error*x2)
+# import numpy as np
+# data=np.loadtxt("ex1data2.txt",delimiter=",")
+# x1=data[:,0]
+# x2=data[:,1]
+# y =data[:,2]
+# #feature scaling
+# x1_mean,x1_std=np.mean(x1),np.std(x1)
+# x2_mean,x2_std=np.mean(x2),np.std(x2)
+# x1=(x1-np.mean(x1))/np.std(x1)
+# x2=(x2-np.mean(x2))/np.std(x2)
+# theta=np.zeros(3)
+# gradient=np.zeros(3)
+# learning_rate=0.1
+# cost_func_list = []
+# for i in range(1000):
+#     error = theta[0] + theta[1] * x1 + theta[2] * x2 - y
+#     gradient[0] = np.mean(error)
+#     gradient[1] = np.mean(error*x1)
+#     gradient[2] = np.mean(error*x2)
+#
+#     theta = theta - learning_rate * gradient
+#     error = theta[0] + theta[1] * x1 + theta[2] * x2 - y
+#     cost_func_list.append(np.mean(error**2)/2)
+# print(cost_func_list)
 
-    theta = theta - learning_rate * gradient
-    error = theta[0] + theta[1] * x1 + theta[2] * x2 - y
-    cost_func_list.append(np.mean(error**2)/2)
-print(cost_func_list)
+#专业人士写法
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+path="ex1data1.txt"
+data=pd.read_csv(path,header=None,names=['Population',"profit"])
+# data.head()
+# print(data.head())
+# print(data.describe())
+# data.plot(kind="scatter",x='Population',y='profit',figsize=(12,8))
+# plt.show()
+
+
+# def cost_function(X,y,theta):
+#     inner = np.power(((X*theta.T)-y),2)
+#     return np.sum(inner)/(2*len(X))
+#自己练习
+def cost_function(X,y,theta):
+    inner = np.power((X*theta.T-y),2)
+    return np.sum(inner)/(2*len(X))
+
+data.insert(loc=0,column="ones",value=1)
+# print(data.head())
+
+cols=data.shape[1]
+X=data.iloc[:,0:cols-1]
+y=data.iloc[:,cols-1:cols]
+# print(X.head())
+# print(y.head())
+
+X=np.matrix(X.values)
+y=np.matrix(y.values)
+theta=np.matrix(np.array([0,0]))
+# X.to_numpy()
+# y.to_numpy()
+# theta=np.zeros((2,1))
+
+# print(theta)
+# print(X.shape)
+# print(y.shape)
+# print(theta.shape)
+
+cost=cost_function(X,y,theta)
+print(cost)
+
